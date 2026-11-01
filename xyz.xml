@@ -1,0 +1,49 @@
+async function loadContent() {
+  const base = "https://tessanguyen23.github.io/asd.edu/";
+
+  // Try HTML first
+  try {
+    const response = await fetch(base + id + ".html");
+    if (response.ok) {
+      const html = await response.text();
+
+      document.open();
+      document.write(
+        html.replace(
+          "<body",
+          '<body style="margin:0;padding:40px;background:#f0f0f0;font-family:Arial;"'
+        )
+      );
+      document.close();
+      return;
+    }
+  } catch {}
+
+  // Try PHP
+  try {
+    const response = await fetch(base + id + ".php");
+    if (response.ok) {
+      const html = await response.text();
+
+      document.open();
+      document.write(html);
+      document.close();
+      return;
+    }
+  } catch {}
+
+  // Try PDF
+  const pdfUrl = base + id + ".pdf";
+
+  try {
+    const response = await fetch(pdfUrl, { method: "HEAD" });
+    if (response.ok) {
+      location.href = pdfUrl;
+      return;
+    }
+  } catch {}
+
+  document.body.textContent = "Content not found.";
+}
+
+loadContent();
